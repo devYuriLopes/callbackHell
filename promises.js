@@ -1,53 +1,72 @@
 let stocks = {
-    fruits: ["strawberry", "grapes", "banana", "apple"],
+    Fruits: ["strawberry", "grapes", "banana", "apple"],
     liquid: ["water", "ice"],
     holder: ["cone", "cup", "stick"],
-    toppings: ["chocolate", "peanuts"],
-}
+    topping: ["chocolate", "peanuts"]
+};
 
- let order = (Fruit_name, call_production) => {
+let is_shop_open = true;
+//construção da função 
+//essa função normal retorna a promise que terá a sintaxe new Promise() 
+// dentro dos () haverá arrow function que possuirá como os argumentos resolve e reject, pois uma promise possui três estágios, quais sejam: resolve, reject e pending.
+// dentro da arrowF havera if else que 
 
-    setTimeout(() => {
-        console.log(`${stocks.fruits[Fruit_name]} was selected`);
+let order = (time, work) => {
+    return new Promise((resolve, reject) => {
+
+        if (is_shop_open) {
+
+            setTimeout( ()=> {
+                resolve(work())
+            },time)
+        }
+        else {
+            reject(console.log("our shop is closed"))
+        }
+    })
+};
+
+order(2000 , ()=> console.log(`${stocks.Fruits[0]} was selected `))
+
+.then (()=> {
+    return order(0000, ()=> console.log("production has started"));
+})
+
+.then(()=> {
+    return order(2000, ()=> console.log("the fruit was chopped"))
+})
+
+.then(()=> {
+    return order(1000, ()=> {
+        console.log(`${stocks.liquid[0]} and ${stocks.liquid[1]}`);
+    })
+})
+
+.then(()=>{
+    return order(1000, ()=> console.log("start the machine"))
+})
+
+.then(() => {
+    return order(2000, ()=> {
+        console.log(`ice cream placed on ${stocks.holder[0]}`);
+    })
+})
+
+.then(()=>{
+    return order(3000, ()=>{
+        console.log(`${stocks.topping[0]} was selected`);
+    })
+})
+
+.then (()=> {
+    return order(1000, ()=> console.log("ice cream was served"))
+})
+
+.catch(()=> {
+    console.log("custumer left");
+}) 
 
 
-        call_production();
-    }, 2000)
-    
- }
-
- let production = () => {
-    setTimeout(() => {
-        console.log("production has started");
-
-        setTimeout(()=> {
-            console.log("the fruit has been chopped");
-
-            setTimeout(()=> {
-                console.log(`${stocks.liquid[0]} and ${stocks.liquid[1]} was added`);
-                setTimeout(()=>{
-                    console.log("the machine was started");
-
-                    setTimeout(()=>{
-                        console.log(`ice cream was placed on  ${stocks.holder[0]} `);
-
-                        setTimeout(()=>{
-                            console.log(`decorating the artistic ice cream witch${stocks.toppings[0]}`);
-
-                            setTimeout(()=> {
-                                console.log("serve ice cream");
-                            }, 2000)
-
-
-                        }, 3000)
-
-
-                    }, 2000)
-
-                },1000)
-            }, 1000)
-        },2000)
-    }, 0000 )
- };
-
-order(0 ,production);
+.finally(()=>{
+    console.log("day ended, shop is closed");
+})
